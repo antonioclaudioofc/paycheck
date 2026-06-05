@@ -130,3 +130,43 @@ Para assegurar consultas rápidas mesmo com grandes volumes de transações, for
 1. `@@index([userId, date])`: Otimiza a renderização de extratos ordenados por data e filtros temporais.
 2. `@@index([userId, type])`: Otimiza a agregação de totais de receitas e despesas no dashboard.
 3. `@@index([userId, categoryId])`: Otimiza os relatórios de gastos por categoria e checagem de limites de orçamento.
+
+---
+
+## 4. Política de Exclusão Lógica (Soft Delete)
+
+Para evitar a perda acidental de dados históricos importantes e manter a integridade dos relatórios financeiros, o Paycheck implementa a exclusão lógica (**Soft Delete**).
+
+### 4.1. Campo `active`
+Tabelas chaves (`users`, `categories`, `transactions`, `budgets` e `goals`) possuem o campo:
+- **`active`**: `Boolean` com valor padrão `true`.
+
+### 4.2. Como Excluir Registros
+Quando o usuário solicitar a "exclusão" de qualquer entidade, o desenvolvedor **nunca** deve invocar o método `delete()` ou `deleteMany()` do Prisma Client. Em vez disso, deve atualizar o status de atividade para `false`:
+
+```typescript
+// Exemplo de Soft Delete de uma Transação
+await prisma.transaction.update({
+  where: {
+    id: transactionId,
+    userId: session.user.id // Ownership check
+  },
+  data: {
+    active: false
+  }
+});
+```
+
+### 4.3. Como Consultar Registros
+Toda consulta de leitura (`findMany`, `findFirst`, `findUnique`) deve sempre filtrar registros ativos:
+
+```typescript
+// Exemplo de consulta filtrando apenas ativos
+const activeTransactions = await prisma.transaction.findMany({
+  where: {
+    userId: session.user.id,
+    active: true
+  }
+});
+```
+

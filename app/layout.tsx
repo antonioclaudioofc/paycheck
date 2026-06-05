@@ -10,7 +10,7 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
   title: "Paycheck",
-  description: "Paycheck",
+  description: "Simulador de salário",
 };
 
 export default function RootLayout({

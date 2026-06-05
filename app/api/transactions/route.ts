@@ -2,6 +2,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { sseManager } from "@/lib/sse-manager";
 import { createTransactionSchema } from "@/lib/validations";
+import { Prisma } from "@prisma/client";
 
 export async function GET(request: Request) {
   try {
@@ -21,7 +22,7 @@ export async function GET(request: Request) {
     const startDate = searchParams.get("startDate");
     const endDate = searchParams.get("endDate");
 
-    const where: any = {
+    const where: Prisma.TransactionWhereInput = {
       userId: session.user.id,
       active: true,
     };

@@ -28,7 +28,7 @@ class SSEManager {
   /**
    * Send an event to all connected clients of a specific user
    */
-  public sendToUser(userId: string, event: string, data: any) {
+  public sendToUser(userId: string, event: string, data: unknown) {
     const payload = `event: ${event}\ndata: ${JSON.stringify(data)}\n\n`;
     const encoder = new TextEncoder();
 
@@ -36,7 +36,7 @@ class SSEManager {
       if (client.userId === userId) {
         try {
           client.controller.enqueue(encoder.encode(payload));
-        } catch (error) {
+        } catch {
           // Client might have disconnected, clean up
           this.clients.delete(client);
         }
@@ -47,14 +47,14 @@ class SSEManager {
   /**
    * Broadcast an event to all connected clients
    */
-  public broadcast(event: string, data: any) {
+  public broadcast(event: string, data: unknown) {
     const payload = `event: ${event}\ndata: ${JSON.stringify(data)}\n\n`;
     const encoder = new TextEncoder();
 
     for (const client of this.clients) {
       try {
         client.controller.enqueue(encoder.encode(payload));
-      } catch (error) {
+      } catch {
         this.clients.delete(client);
       }
     }
@@ -63,12 +63,12 @@ class SSEManager {
   /**
    * Send event to a single client helper
    */
-  private sendToClient(client: SSEClient, event: string, data: any) {
+  private sendToClient(client: SSEClient, event: string, data: unknown) {
     try {
       const payload = `event: ${event}\ndata: ${JSON.stringify(data)}\n\n`;
       const encoder = new TextEncoder();
       client.controller.enqueue(encoder.encode(payload));
-    } catch (error) {
+    } catch {
       this.clients.delete(client);
     }
   }

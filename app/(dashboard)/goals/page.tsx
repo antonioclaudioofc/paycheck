@@ -167,7 +167,7 @@ export default function GoalsPage() {
                       <div>
                         <p className="font-semibold text-base">{goal.title}</p>
                         {goal.deadline && (
-                          <p className="text-xs text-muted-foreground mt-0.5">
+                          <p className="text-xs text-muted-foreground mt-0.5" suppressHydrationWarning>
                             Prazo:{" "}
                             {new Date(goal.deadline).toLocaleDateString(
                               "pt-br",
@@ -201,4 +201,3 @@ export default function GoalsPage() {
     </div>
   );
 }
-export const dynamic = "force-dynamic";

@@ -226,7 +226,7 @@ export default function TransactionsPage() {
                     ></div>
                     <div>
                       <p className="font-semibold text-sm">{tx.description}</p>
-                      <p className="text-xs text-muted-foreground">
+                      <p className="text-xs text-muted-foreground" suppressHydrationWarning>
                         {tx.category?.name} •{" "}
                         {new Date(tx.date).toLocaleDateString("pt-br")}
                       </p>
@@ -262,4 +262,3 @@ export default function TransactionsPage() {
     </div>
   );
 }
-export const dynamic = "force-dynamic";

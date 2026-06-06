@@ -7,6 +7,7 @@ import { Landmark } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -50,7 +51,10 @@ export default function RegisterPage() {
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-background px-4">
+    <main className="min-h-screen flex items-center justify-center bg-background px-4 relative">
+      <div className="absolute top-6 right-6">
+        <ThemeToggle />
+      </div>
       <div className="w-full max-w-md p-8 rounded-3xl glass shadow-2xl relative">
         <div className="text-center mb-8 flex flex-col items-center">
           <Landmark className="w-12 h-12 text-primary mb-3" />
@@ -79,7 +83,7 @@ export default function RegisterPage() {
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
-            placeholder="Antônio Claudio"
+            placeholder="Digite seu nome"
           />
 
           <Input
@@ -88,7 +92,7 @@ export default function RegisterPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            placeholder="exemplo@email.com"
+            placeholder="Digite seu e-mail"
           />
 
           <Input
@@ -97,7 +101,7 @@ export default function RegisterPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            placeholder="Mínimo 6 caracteres"
+            placeholder="Crie uma senha"
           />
 
           <Button
@@ -122,4 +126,3 @@ export default function RegisterPage() {
     </main>
   );
 }
-export const dynamic = "force-dynamic";

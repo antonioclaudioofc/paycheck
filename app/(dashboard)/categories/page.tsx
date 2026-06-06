@@ -155,4 +155,3 @@ export default function CategoriesPage() {
     </div>
   );
 }
-export const dynamic = "force-dynamic";

@@ -11,9 +11,9 @@ import {
 } from "lucide-react";
 
 const navItems = [
-  { href: "/", label: "Dashboard", icon: LayoutDashboard },
   { href: "/transactions", label: "Transações", icon: ArrowLeftRight },
   { href: "/categories", label: "Categorias", icon: FolderTree },
+  { href: "/", label: "Dashboard", icon: LayoutDashboard },
   { href: "/budgets", label: "Orçamentos", icon: PiggyBank },
   { href: "/goals", label: "Metas", icon: Target },
 ];

@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { SidebarNav } from "./sidebar-nav";
 import { BottomNav } from "./bottom-nav";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { Landmark } from "lucide-react";
+import SidebarNav from "./sidebar-nav";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const [isCollapsed, setIsCollapsed] = useState(false);

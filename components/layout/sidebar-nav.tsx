@@ -29,18 +29,18 @@ interface SidebarNavProps {
   toggleCollapse: () => void;
 }
 
-export function SidebarNav({ isCollapsed, toggleCollapse }: SidebarNavProps) {
+export default function SidebarNav({ isCollapsed, toggleCollapse }: SidebarNavProps) {
   const pathname = usePathname();
 
   return (
     <div
-      className={`relative flex flex-col h-full py-6 justify-between bg-card text-card-foreground border-r border-border transition-all duration-300 ${
+      className={`relative flex flex-col h-full pt-20 pb-8 justify-between bg-card text-card-foreground border-r border-border transition-all duration-300 ${
         isCollapsed ? "px-2" : "px-4"
       }`}
     >
       <button
         onClick={toggleCollapse}
-        className="absolute top-8 -right-5 z-40 bg-card border border-border rounded-full w-10 h-10 flex items-center justify-center text-muted-foreground hover:text-foreground shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer hover:scale-105"
+        className="absolute top-20 -right-5 z-40 bg-card border border-border rounded-full w-10 h-10 flex items-center justify-center text-muted-foreground hover:text-foreground shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer hover:scale-105"
         title={isCollapsed ? "Expandir" : "Recolher"}
       >
         {isCollapsed ? (
@@ -128,5 +128,3 @@ export function SidebarNav({ isCollapsed, toggleCollapse }: SidebarNavProps) {
     </div>
   );
 }
-
-export default SidebarNav;

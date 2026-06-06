@@ -8,6 +8,7 @@ import { Landmark } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -43,7 +44,10 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-background px-4">
+    <main className="min-h-screen flex items-center justify-center bg-background px-4 relative">
+      <div className="absolute top-6 right-6">
+        <ThemeToggle />
+      </div>
       <div className="w-full max-w-md p-8 rounded-3xl glass shadow-2xl relative">
         <div className="text-center mb-8 flex flex-col items-center">
           <Landmark className="w-12 h-12 text-primary mb-3" />
@@ -64,7 +68,7 @@ export default function LoginPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            placeholder="exemplo@email.com"
+            placeholder="Digite seu e-mail"
           />
 
           <Input
@@ -73,7 +77,7 @@ export default function LoginPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            placeholder="••••••••"
+            placeholder="Digite sua senha"
           />
 
           <Button type="submit" disabled={loading} className="w-full">
@@ -94,4 +98,3 @@ export default function LoginPage() {
     </main>
   );
 }
-export const dynamic = "force-dynamic";

@@ -219,4 +219,3 @@ export default function BudgetsPage() {
     </div>
   );
 }
-export const dynamic = "force-dynamic";

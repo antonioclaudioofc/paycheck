@@ -137,14 +137,14 @@ export function DashboardClient({ user }: { user: User }) {
           <h2 className="text-3xl font-bold tracking-tight">
             Olá, {user.name || "CLT"}
           </h2>
-          <p className="text-muted-foreground mt-1">
+          <p className="text-muted-foreground mt-1" suppressHydrationWarning>
             Aqui está o resumo das suas finanças em {currentMonthName} de{" "}
             {currentYear}.
           </p>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="p-6 rounded-3xl glass border border-border flex flex-col justify-between h-36">
           <div className="flex items-center justify-between text-muted-foreground">
             <span className="text-sm font-semibold">Saldo Atual</span>

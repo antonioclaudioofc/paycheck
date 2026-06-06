@@ -13,7 +13,7 @@ model User {
   email         String    @unique
   emailVerified DateTime? @map("email_verified")
   image         String?
-  passwordHash  String?   @map("password_hash") 
+  passwordHash  String?   @map("password_hash")
   createdAt     DateTime  @default(now()) @map("created_at")
   updatedAt     DateTime  @updatedAt @map("updated_at")
   active        Boolean   @default(true)
@@ -63,7 +63,7 @@ model Category {
   id        String          @id @default(cuid())
   userId    String          @map("user_id")
   name      String
-  color     String          @default("#6366f1")
+  color     String          @default("#2563eb")
   icon      String?
   type      TransactionType // INCOME | EXPENSE
   isDefault Boolean         @default(false) @map("is_default")

@@ -1,15 +1,50 @@
-import React from "react";
+"use client";
+
+import React, { useState, useEffect } from "react";
 import { SidebarNav } from "./sidebar-nav";
 import { BottomNav } from "./bottom-nav";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { Landmark } from "lucide-react";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("sidebar-collapsed");
+    if (saved === "true") {
+      setIsCollapsed(true);
+    }
+  }, []);
+
+  const toggleCollapse = () => {
+    const newVal = !isCollapsed;
+    setIsCollapsed(newVal);
+    localStorage.setItem("sidebar-collapsed", String(newVal));
+  };
+
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-background text-foreground">
-      <aside className="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0 z-30">
-        <SidebarNav />
+      <header className="flex md:hidden items-center justify-between px-4 py-3 bg-card border-b border-border z-30">
+        <div className="flex items-center space-x-2">
+          <Landmark className="w-6 h-6 text-primary shrink-0" />
+          <span className="font-bold text-lg">Paycheck</span>
+        </div>
+        <ThemeToggle />
+      </header>
+
+      <aside
+        className={`hidden md:flex md:flex-col md:fixed md:inset-y-0 z-30 transition-all duration-300 ${
+          isCollapsed ? "md:w-20" : "md:w-64"
+        }`}
+      >
+        <SidebarNav isCollapsed={isCollapsed} toggleCollapse={toggleCollapse} />
       </aside>
 
-      <main className="flex-1 md:ml-64 pb-20 md:pb-6 p-4 md:p-8 overflow-y-auto">
+      <main
+        className={`flex-1 pb-20 md:pb-6 p-4 md:p-8 overflow-y-auto transition-all duration-300 ${
+          isCollapsed ? "md:ml-20" : "md:ml-64"
+        }`}
+      >
         <div className="max-w-6xl mx-auto">{children}</div>
       </main>
 

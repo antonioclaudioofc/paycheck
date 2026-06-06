@@ -5,6 +5,10 @@ import { PiggyBank, Plus } from "lucide-react";
 import { useBudgets, useCreateBudget } from "@/hooks/use-budgets";
 import { useCategories } from "@/hooks/use-categories";
 import { createBudgetSchema } from "@/lib/validations";
+import { Input } from "@/components/ui/input";
+import { Select } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { Alert } from "@/components/ui/alert";
 
 export default function BudgetsPage() {
   const { data: budgets = [], isLoading: loadingBudgets } = useBudgets();
@@ -95,103 +99,76 @@ export default function BudgetsPage() {
             <span>Definir Limite</span>
           </h3>
 
-          {error && (
-            <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
-              {error}
-            </div>
-          )}
-
+          {error && <Alert type="error" message={error} />}
           {success && (
-            <div className="p-4 rounded-xl bg-green-500/10 border border-green-500/20 text-green-400 text-sm">
-              Orçamento salvo com sucesso!
-            </div>
+            <Alert type="success" message="Orçamento salvo com sucesso!" />
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
-                Categoria de Despesa
-              </label>
-              <select
-                value={categoryId}
-                onChange={(e) => setCategoryId(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl bg-secondary border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
-              >
-                {expenseCategories.length === 0 ? (
-                  <option value="">
-                    Nenhuma categoria de despesa disponível
+            <Select
+              label="Categoria de Despesa"
+              value={categoryId}
+              onChange={(e) => setCategoryId(e.target.value)}
+            >
+              {expenseCategories.length === 0 ? (
+                <option value="">
+                  Nenhuma categoria de despesa disponível
+                </option>
+              ) : (
+                expenseCategories.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.name}
                   </option>
-                ) : (
-                  expenseCategories.map((cat) => (
-                    <option key={cat.id} value={cat.id}>
-                      {cat.name}
-                    </option>
-                  ))
-                )}
-              </select>
-            </div>
+                ))
+              )}
+            </Select>
 
-            <div>
-              <label className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
-                Limite Mensal (R$)
-              </label>
-              <input
-                type="number"
-                step="0.01"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                required
-                className="w-full px-4 py-3 rounded-xl bg-secondary border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
-                placeholder="0.00"
-              />
-            </div>
+            <Input
+              label="Limite Mensal (R$)"
+              type="number"
+              step="0.01"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              required
+              placeholder="0.00"
+            />
 
             <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
-                  Mês
-                </label>
-                <select
-                  value={month}
-                  onChange={(e) => setMonth(parseInt(e.target.value, 10))}
-                  className="w-full px-4 py-3 rounded-xl bg-secondary border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
-                >
-                  {Array.from({ length: 12 }, (_, i) => i + 1).map((m) => (
-                    <option key={m} value={m}>
-                      {getMonthName(m)}
-                    </option>
-                  ))}
-                </select>
-              </div>
+              <Select
+                label="Mês"
+                value={month}
+                onChange={(e) => setMonth(parseInt(e.target.value, 10))}
+              >
+                {Array.from({ length: 12 }, (_, i) => i + 1).map((m) => (
+                  <option key={m} value={m}>
+                    {getMonthName(m)}
+                  </option>
+                ))}
+              </Select>
 
-              <div>
-                <label className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
-                  Ano
-                </label>
-                <select
-                  value={year}
-                  onChange={(e) => setYear(parseInt(e.target.value, 10))}
-                  className="w-full px-4 py-3 rounded-xl bg-secondary border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
-                >
-                  <option value={2026}>2026</option>
-                  <option value={2027}>2027</option>
-                </select>
-              </div>
+              <Select
+                label="Ano"
+                value={year}
+                onChange={(e) => setYear(parseInt(e.target.value, 10))}
+              >
+                <option value={2026}>2026</option>
+                <option value={2027}>2027</option>
+              </Select>
             </div>
 
-            <button
+            <Button
               type="submit"
               disabled={createBudget.isPending}
-              className="w-full py-3 px-4 rounded-xl bg-primary text-primary-foreground font-semibold shadow-lg shadow-primary/20 hover:brightness-110 active:scale-98 transition-all duration-200 cursor-pointer disabled:opacity-50"
+              className="w-full"
             >
               {createBudget.isPending ? "Salvando..." : "Salvar Orçamento"}
-            </button>
+            </Button>
           </form>
         </div>
 
         <div className="lg:col-span-2 p-6 rounded-3xl glass border border-border space-y-6">
           <h3 className="font-bold text-lg flex items-center space-x-2">
-            <PiggyBank className="w-5 h-5 text-indigo-400" />
+            <PiggyBank className="w-5 h-5 text-primary" />
             <span>Limites Configurados</span>
           </h3>
 
@@ -214,7 +191,7 @@ export default function BudgetsPage() {
                     <div
                       className="w-8 h-8 rounded-lg"
                       style={{
-                        backgroundColor: budget.category?.color || "#6366f1",
+                        backgroundColor: budget.category?.color || "#2563eb",
                       }}
                     ></div>
                     <div>

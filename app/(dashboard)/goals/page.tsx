@@ -4,6 +4,9 @@ import React, { useState } from "react";
 import { Target, Plus } from "lucide-react";
 import { useGoals, useCreateGoal } from "@/hooks/use-goals";
 import { createGoalSchema } from "@/lib/validations";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Alert } from "@/components/ui/alert";
 
 export default function GoalsPage() {
   const { data: goals = [], isLoading } = useGoals();
@@ -78,87 +81,65 @@ export default function GoalsPage() {
             <span>Criar Nova Meta</span>
           </h3>
 
-          {error && (
-            <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
-              {error}
-            </div>
-          )}
+          {error && <Alert type="error" message={error} className="mb-4" />}
 
           {success && (
-            <div className="p-4 rounded-xl bg-green-500/10 border border-green-500/20 text-green-400 text-sm">
-              Meta criada com sucesso!
-            </div>
+            <Alert
+              type="success"
+              message="Meta criada com sucesso!"
+              className="mb-4"
+            />
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
-                Título do Objetivo
-              </label>
-              <input
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                required
-                className="w-full px-4 py-3 rounded-xl bg-secondary border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
-                placeholder="Ex: Reserva de emergência, Viagem..."
-              />
-            </div>
+            <Input
+              label="Título do Objetivo"
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              required
+              placeholder="Ex: Reserva de emergência, Viagem..."
+            />
 
-            <div>
-              <label className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
-                Valor Alvo (R$)
-              </label>
-              <input
-                type="number"
-                step="0.01"
-                value={targetAmount}
-                onChange={(e) => setTargetAmount(e.target.value)}
-                required
-                className="w-full px-4 py-3 rounded-xl bg-secondary border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
-                placeholder="0.00"
-              />
-            </div>
+            <Input
+              label="Valor Alvo (R$)"
+              type="number"
+              step="0.01"
+              value={targetAmount}
+              onChange={(e) => setTargetAmount(e.target.value)}
+              required
+              placeholder="0.00"
+            />
 
-            <div>
-              <label className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
-                Valor Já Economizado (R$ - Opcional)
-              </label>
-              <input
-                type="number"
-                step="0.01"
-                value={savedAmount}
-                onChange={(e) => setSavedAmount(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl bg-secondary border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
-                placeholder="0.00"
-              />
-            </div>
+            <Input
+              label="Valor Já Economizado (R$ - Opcional)"
+              type="number"
+              step="0.01"
+              value={savedAmount}
+              onChange={(e) => setSavedAmount(e.target.value)}
+              placeholder="0.00"
+            />
 
-            <div>
-              <label className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
-                Prazo Limite (Opcional)
-              </label>
-              <input
-                type="date"
-                value={deadline}
-                onChange={(e) => setDeadline(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl bg-secondary border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
-              />
-            </div>
+            <Input
+              label="Prazo Limite (Opcional)"
+              type="date"
+              value={deadline}
+              onChange={(e) => setDeadline(e.target.value)}
+            />
 
-            <button
+            <Button
               type="submit"
               disabled={createGoal.isPending}
-              className="w-full py-3 px-4 rounded-xl bg-primary text-primary-foreground font-semibold shadow-lg shadow-primary/20 hover:brightness-110 active:scale-98 transition-all duration-200 cursor-pointer disabled:opacity-50"
+              className="w-full"
             >
               {createGoal.isPending ? "Criando..." : "Criar Meta"}
-            </button>
+            </Button>
           </form>
         </div>
 
         <div className="lg:col-span-2 p-6 rounded-3xl glass border border-border space-y-6">
           <h3 className="font-bold text-lg flex items-center space-x-2">
-            <Target className="w-5 h-5 text-indigo-400" />
+            <Target className="w-5 h-5 text-primary" />
             <span>Seus Objetivos</span>
           </h3>
 

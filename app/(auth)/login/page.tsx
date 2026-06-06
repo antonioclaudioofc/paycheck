@@ -4,6 +4,10 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
+import { Landmark } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Alert } from "@/components/ui/alert";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -40,12 +44,10 @@ export default function LoginPage() {
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-background px-4">
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl -z-10 animate-pulse-slow"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl -z-10 animate-pulse-slow"></div>
-
       <div className="w-full max-w-md p-8 rounded-3xl glass shadow-2xl relative">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-extrabold tracking-tight bg-linear-to-r from-primary to-indigo-400 bg-clip-text text-transparent">
+        <div className="text-center mb-8 flex flex-col items-center">
+          <Landmark className="w-12 h-12 text-primary mb-3" />
+          <h1 className="text-3xl font-extrabold tracking-tight text-foreground">
             Paycheck
           </h1>
           <p className="text-sm text-muted-foreground mt-2">
@@ -53,50 +55,30 @@ export default function LoginPage() {
           </p>
         </div>
 
-        {error && (
-          <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm text-center">
-            {error}
-          </div>
-        )}
+        {error && <Alert type="error" message={error} className="mb-6" />}
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
-              E-mail
-            </label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full px-4 py-3 rounded-xl bg-secondary border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
-              placeholder="exemplo@email.com"
-            />
-          </div>
+          <Input
+            label="E-mail"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            placeholder="exemplo@email.com"
+          />
 
-          <div>
-            <div className="flex justify-between items-center mb-2">
-              <label className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                Senha
-              </label>
-            </div>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="w-full px-4 py-3 rounded-xl bg-secondary border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
-              placeholder="••••••••"
-            />
-          </div>
+          <Input
+            label="Senha"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            placeholder="••••••••"
+          />
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full py-3 px-4 rounded-xl bg-primary text-primary-foreground font-semibold shadow-lg shadow-primary/20 hover:brightness-110 active:scale-98 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
-          >
+          <Button type="submit" disabled={loading} className="w-full">
             {loading ? "Entrando..." : "Entrar"}
-          </button>
+          </Button>
         </form>
 
         <div className="mt-8 text-center text-sm text-muted-foreground">

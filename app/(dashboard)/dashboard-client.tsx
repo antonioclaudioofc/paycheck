@@ -103,13 +103,13 @@ export function DashboardClient({ user }: { user: User }) {
             key={alert.categoryId}
             className={`p-4 rounded-2xl glass border shadow-2xl flex items-start justify-between space-x-3 transition-all duration-300 animate-slide-in ${
               alert.severity === "danger"
-                ? "border-red-500/30 bg-red-950/20 text-red-200"
-                : "border-yellow-500/30 bg-yellow-950/20 text-yellow-200"
+                ? "border-red-200 bg-red-50 text-red-800"
+                : "border-amber-200 bg-amber-50 text-amber-800"
             }`}
           >
             <div className="flex items-start space-x-3">
               <AlertTriangle
-                className={`w-5 h-5 mt-0.5 shrink-0 ${alert.severity === "danger" ? "text-red-400" : "text-yellow-400"}`}
+                className={`w-5 h-5 mt-0.5 shrink-0 ${alert.severity === "danger" ? "text-red-600" : "text-amber-600"}`}
               />
               <div>
                 <p className="font-bold text-sm">Alerta de Orçamento!</p>
@@ -135,7 +135,7 @@ export function DashboardClient({ user }: { user: User }) {
       <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
         <div>
           <h2 className="text-3xl font-bold tracking-tight">
-            Olá, {user.name || "CLT"} 👋
+            Olá, {user.name || "CLT"}
           </h2>
           <p className="text-muted-foreground mt-1">
             Aqui está o resumo das suas finanças em {currentMonthName} de{" "}
@@ -148,11 +148,11 @@ export function DashboardClient({ user }: { user: User }) {
         <div className="p-6 rounded-3xl glass border border-border flex flex-col justify-between h-36">
           <div className="flex items-center justify-between text-muted-foreground">
             <span className="text-sm font-semibold">Saldo Atual</span>
-            <Wallet className="w-5 h-5 text-indigo-400" />
+            <Wallet className="w-5 h-5 text-primary" />
           </div>
           <div>
             <p
-              className={`text-xl md:text-2xl font-black ${netBalance >= 0 ? "text-emerald-400" : "text-red-400"}`}
+              className={`text-xl md:text-2xl font-black ${netBalance >= 0 ? "text-emerald-600" : "text-red-600"}`}
             >
               R${" "}
               {netBalance.toLocaleString("pt-br", { minimumFractionDigits: 2 })}
@@ -166,10 +166,10 @@ export function DashboardClient({ user }: { user: User }) {
         <div className="p-6 rounded-3xl glass border border-border flex flex-col justify-between h-36">
           <div className="flex items-center justify-between text-muted-foreground">
             <span className="text-sm font-semibold">Receitas</span>
-            <TrendingUp className="w-5 h-5 text-emerald-400" />
+            <TrendingUp className="w-5 h-5 text-emerald-600" />
           </div>
           <div>
-            <p className="text-xl md:text-2xl font-black text-emerald-400">
+            <p className="text-xl md:text-2xl font-black text-emerald-600">
               R${" "}
               {totalIncome.toLocaleString("pt-br", {
                 minimumFractionDigits: 2,
@@ -184,10 +184,10 @@ export function DashboardClient({ user }: { user: User }) {
         <div className="p-6 rounded-3xl glass border border-border flex flex-col justify-between h-36">
           <div className="flex items-center justify-between text-muted-foreground">
             <span className="text-sm font-semibold">Despesas</span>
-            <TrendingDown className="w-5 h-5 text-red-400" />
+            <TrendingDown className="w-5 h-5 text-red-600" />
           </div>
           <div>
-            <p className="text-xl md:text-2xl font-black text-red-400">
+            <p className="text-xl md:text-2xl font-black text-red-600">
               R${" "}
               {totalExpense.toLocaleString("pt-br", {
                 minimumFractionDigits: 2,
@@ -200,10 +200,10 @@ export function DashboardClient({ user }: { user: User }) {
         <div className="p-6 rounded-3xl glass border border-border flex flex-col justify-between h-36">
           <div className="flex items-center justify-between text-muted-foreground">
             <span className="text-sm font-semibold">Metas Poupança</span>
-            <Bell className="w-5 h-5 text-yellow-400 animate-pulse" />
+            <Bell className="w-5 h-5 text-amber-500 animate-pulse" />
           </div>
           <div>
-            <p className="text-xl md:text-2xl font-black text-indigo-400">
+            <p className="text-xl md:text-2xl font-black text-primary">
               {goals.length} Ativas
             </p>
             <p className="text-xs text-muted-foreground mt-1">
@@ -239,8 +239,8 @@ export function DashboardClient({ user }: { user: User }) {
                     <div
                       className="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-sm"
                       style={{
-                        backgroundColor: `${tx.category?.color || "#6366f1"}20`,
-                        color: tx.category?.color || "#6366f1",
+                        backgroundColor: `${tx.category?.color || "#2563eb"}20`,
+                        color: tx.category?.color || "#2563eb",
                       }}
                     >
                       {tx.category?.name?.charAt(0) || "T"}
@@ -255,7 +255,7 @@ export function DashboardClient({ user }: { user: User }) {
                   </div>
                   <p
                     className={`font-bold text-sm ${
-                      tx.type === "INCOME" ? "text-emerald-400" : "text-red-400"
+                      tx.type === "INCOME" ? "text-emerald-600" : "text-red-600"
                     }`}
                   >
                     {tx.type === "INCOME" ? "+" : "-"} R${" "}
@@ -318,7 +318,7 @@ export function DashboardClient({ user }: { user: User }) {
                           style={{
                             width: `${Math.min(percentage, 100)}%`,
                             backgroundColor:
-                              budget.category?.color || "#6366f1",
+                              budget.category?.color || "#2563eb",
                           }}
                         ></div>
                       </div>

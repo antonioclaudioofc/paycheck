@@ -10,34 +10,68 @@ import {
   PiggyBank,
   Target,
   LogOut,
+  Landmark,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 const navItems = [
   { href: "/", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/transactions", label: "Transactions", icon: ArrowLeftRight },
-  { href: "/categories", label: "Categories", icon: FolderTree },
-  { href: "/budgets", label: "Budgets", icon: PiggyBank },
-  { href: "/goals", label: "Goals", icon: Target },
+  { href: "/transactions", label: "Transações", icon: ArrowLeftRight },
+  { href: "/categories", label: "Categorias", icon: FolderTree },
+  { href: "/budgets", label: "Orçamentos", icon: PiggyBank },
+  { href: "/goals", label: "Metas", icon: Target },
 ];
 
-export function SidebarNav() {
+interface SidebarNavProps {
+  isCollapsed: boolean;
+  toggleCollapse: () => void;
+}
+
+export function SidebarNav({ isCollapsed, toggleCollapse }: SidebarNavProps) {
   const pathname = usePathname();
 
   return (
-    <div className="flex flex-col h-full px-4 py-6 justify-between bg-card text-card-foreground border-r border-border">
+    <div
+      className={`relative flex flex-col h-full py-6 justify-between bg-card text-card-foreground border-r border-border transition-all duration-300 ${
+        isCollapsed ? "px-2" : "px-4"
+      }`}
+    >
+      <button
+        onClick={toggleCollapse}
+        className="absolute top-8 -right-5 z-40 bg-card border border-border rounded-full w-10 h-10 flex items-center justify-center text-muted-foreground hover:text-foreground shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer hover:scale-105"
+        title={isCollapsed ? "Expandir" : "Recolher"}
+      >
+        {isCollapsed ? (
+          <ChevronRight className="w-5 h-5" />
+        ) : (
+          <ChevronLeft className="w-5 h-5" />
+        )}
+      </button>
+
       <div className="flex flex-col space-y-8">
-        {/* App Title */}
-        <div className="px-3">
-          <h1 className="text-2xl font-bold tracking-tight bg-linear-to-r from-primary to-indigo-400 bg-clip-text text-transparent">
-            Paycheck
-          </h1>
-          <p className="text-xs text-muted-foreground mt-1">
-            Gestão Financeira CLT
-          </p>
+        <div
+          className={`flex items-center ${isCollapsed ? "flex-col space-y-4" : "px-1"}`}
+        >
+          <div
+            className={`flex items-center ${isCollapsed ? "flex-col" : "space-x-3.5"}`}
+          >
+            <Landmark className="w-8 h-8 text-primary shrink-0" />
+            {!isCollapsed && (
+              <div>
+                <h1 className="text-2xl font-bold tracking-tight text-foreground leading-none">
+                  Paycheck
+                </h1>
+                <p className="text-[10px] text-muted-foreground mt-1 font-medium tracking-wide uppercase">
+                  Gestão CLT
+                </p>
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* Navigation Links */}
-        <nav className="flex flex-col space-y-1">
+        <nav className="flex flex-col space-y-1.5">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = pathname === item.href;
@@ -46,28 +80,53 @@ export function SidebarNav() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center space-x-3 px-3 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
+                className={`flex items-center rounded-xl text-base font-semibold transition-all duration-200 ${
+                  isCollapsed
+                    ? "justify-center p-3 w-12 h-12"
+                    : "space-x-3.5 px-4 py-3.5"
+                } ${
                   isActive
-                    ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
+                    ? "bg-primary text-primary-foreground shadow shadow-primary/10"
                     : "hover:bg-secondary text-muted-foreground hover:text-foreground"
                 }`}
+                title={item.label}
               >
-                <Icon className="w-5 h-5" />
-                <span>{item.label}</span>
+                <Icon className="w-6 h-6 shrink-0" />
+                {!isCollapsed && <span>{item.label}</span>}
               </Link>
             );
           })}
         </nav>
       </div>
 
-      <button
-        onClick={() => signOut({ callbackUrl: "/login" })}
-        className="flex items-center space-x-3 px-3 py-3 rounded-xl text-sm font-medium text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-all duration-200 w-full text-left"
-      >
-        <LogOut className="w-5 h-5" />
-        <span>Sair</span>
-      </button>
+      <div className="flex flex-col space-y-4 items-center">
+        <div
+          className={`flex items-center w-full ${isCollapsed ? "justify-center" : "justify-between px-2"}`}
+        >
+          {!isCollapsed && (
+            <span className="text-xs text-muted-foreground font-bold tracking-wider">
+              TEMA
+            </span>
+          )}
+          <ThemeToggle />
+        </div>
+        <button
+          onClick={() => signOut({ callbackUrl: "/login" })}
+          className={`flex items-center rounded-xl text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 hover:text-red-700 transition-all duration-200 cursor-pointer ${
+            isCollapsed
+              ? "justify-center p-3 w-12 h-12"
+              : "space-x-3.5 px-4 py-3.5 w-full text-left"
+          }`}
+          title="Sair"
+        >
+          <LogOut className="w-6 h-6 shrink-0" />
+          {!isCollapsed && (
+            <span className="text-base font-semibold">Sair</span>
+          )}
+        </button>
+      </div>
     </div>
   );
 }
+
 export default SidebarNav;

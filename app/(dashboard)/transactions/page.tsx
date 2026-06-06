@@ -9,6 +9,10 @@ import {
 } from "@/hooks/use-transactions";
 import { useCategories } from "@/hooks/use-categories";
 import { createTransactionSchema } from "@/lib/validations";
+import { Input } from "@/components/ui/input";
+import { Select } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { Alert } from "@/components/ui/alert";
 
 export default function TransactionsPage() {
   const { data: txResponse, isLoading: loadingTx } = useTransactions({
@@ -112,122 +116,89 @@ export default function TransactionsPage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Form panel */}
         <div className="p-6 rounded-3xl glass border border-border h-fit space-y-6">
           <h3 className="font-bold text-lg flex items-center space-x-2">
             <Plus className="w-5 h-5 text-primary" />
             <span>Nova Transação</span>
           </h3>
 
-          {error && (
-            <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
-              {error}
-            </div>
-          )}
-
+          {error && <Alert type="error" message={error} />}
           {success && (
-            <div className="p-4 rounded-xl bg-green-500/10 border border-green-500/20 text-green-400 text-sm">
-              Transação adicionada com sucesso!
-            </div>
+            <Alert type="success" message="Transação adicionada com sucesso!" />
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
-                Descrição
-              </label>
-              <input
-                type="text"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                required
-                className="w-full px-4 py-3 rounded-xl bg-secondary border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
-                placeholder="Ex: Aluguel, Supermercado..."
-              />
-            </div>
+            <Input
+              label="Descrição"
+              type="text"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              required
+              placeholder="Ex: Aluguel, Supermercado..."
+            />
 
-            <div>
-              <label className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
-                Valor (R$)
-              </label>
-              <input
-                type="number"
-                step="0.01"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                required
-                className="w-full px-4 py-3 rounded-xl bg-secondary border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
-                placeholder="0.00"
-              />
-            </div>
+            <Input
+              label="Valor (R$)"
+              type="number"
+              step="0.01"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              required
+              placeholder="0.00"
+            />
 
             <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
-                  Tipo
-                </label>
-                <select
-                  value={type}
-                  onChange={(e) =>
-                    setType(e.target.value as "INCOME" | "EXPENSE")
-                  }
-                  className="w-full px-4 py-3 rounded-xl bg-secondary border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
-                >
-                  <option value="EXPENSE">Despesa</option>
-                  <option value="INCOME">Receita</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
-                  Data
-                </label>
-                <input
-                  type="date"
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                  required
-                  className="w-full px-4 py-3 rounded-xl bg-secondary border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
-                Categoria
-              </label>
-              <select
-                value={categoryId}
-                onChange={(e) => setCategoryId(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl bg-secondary border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
+              <Select
+                label="Tipo"
+                value={type}
+                onChange={(e) =>
+                  setType(e.target.value as "INCOME" | "EXPENSE")
+                }
               >
-                {filteredCategories.length === 0 ? (
-                  <option value="">Nenhuma categoria cadastrada</option>
-                ) : (
-                  filteredCategories.map((cat) => (
-                    <option key={cat.id} value={cat.id}>
-                      {cat.name}
-                    </option>
-                  ))
-                )}
-              </select>
+                <option value="EXPENSE">Despesa</option>
+                <option value="INCOME">Receita</option>
+              </Select>
+
+              <Input
+                label="Data"
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                required
+              />
             </div>
 
-            <button
+            <Select
+              label="Categoria"
+              value={categoryId}
+              onChange={(e) => setCategoryId(e.target.value)}
+            >
+              {filteredCategories.length === 0 ? (
+                <option value="">Nenhuma categoria cadastrada</option>
+              ) : (
+                filteredCategories.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.name}
+                  </option>
+                ))
+              )}
+            </Select>
+
+            <Button
               type="submit"
               disabled={createTransaction.isPending}
-              className="w-full py-3 px-4 rounded-xl bg-primary text-primary-foreground font-semibold shadow-lg shadow-primary/20 hover:brightness-110 active:scale-98 transition-all duration-200 cursor-pointer disabled:opacity-50"
+              className="w-full"
             >
               {createTransaction.isPending
                 ? "Adicionando..."
                 : "Adicionar Transação"}
-            </button>
+            </Button>
           </form>
         </div>
 
         <div className="lg:col-span-2 p-6 rounded-3xl glass border border-border space-y-6">
           <h3 className="font-bold text-lg flex items-center space-x-2">
-            <ArrowLeftRight className="w-5 h-5 text-indigo-400" />
+            <ArrowLeftRight className="w-5 h-5 text-primary" />
             <span>Extrato</span>
           </h3>
 
@@ -250,7 +221,7 @@ export default function TransactionsPage() {
                     <div
                       className="w-8 h-8 rounded-lg"
                       style={{
-                        backgroundColor: tx.category?.color || "#6366f1",
+                        backgroundColor: tx.category?.color || "#2563eb",
                       }}
                     ></div>
                     <div>

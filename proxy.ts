@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { apiLimiter, authLimiter } from "@/lib/rate-limiter";
+import { rateLimitHtml } from "@/lib/templates/error-page";
 
 export const proxy = auth((req) => {
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0] || "127.0.0.1";
@@ -21,6 +22,22 @@ export const proxy = auth((req) => {
   }
 
   if (rateLimitResult && !rateLimitResult.allowed) {
+    const accept = req.headers.get("accept") || "";
+    if (accept.includes("text/html")) {
+      return new NextResponse(
+        rateLimitHtml,
+        {
+          status: 429,
+          headers: {
+            "Content-Type": "text/html; charset=utf-8",
+            "X-RateLimit-Limit": rateLimitResult.limit.toString(),
+            "X-RateLimit-Remaining": rateLimitResult.remaining.toString(),
+            "X-RateLimit-Reset": rateLimitResult.reset.toString(),
+          },
+        },
+      );
+    }
+
     return new NextResponse(
       JSON.stringify({
         error: "Too Many Requests",

@@ -1,6 +1,6 @@
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import DashboardClient from "./dashboard-client";
+import DashboardClient from "./components/dashboard-client";
 
 export default async function DashboardPage() {
   const session = await auth();
@@ -11,4 +11,3 @@ export default async function DashboardPage() {
 
   return <DashboardClient user={session.user} />;
 }
-export const dynamic = "force-dynamic";

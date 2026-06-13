@@ -57,8 +57,11 @@ export async function POST(request: Request) {
     const category = await prisma.category.findFirst({
       where: {
         id: categoryId,
-        userId: session.user.id,
         active: true,
+        OR: [
+          { userId: session.user.id },
+          { isDefault: true },
+        ],
       },
     });
 

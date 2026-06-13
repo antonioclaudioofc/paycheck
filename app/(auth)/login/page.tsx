@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
+import { loginAction } from "@/app/actions/auth";
 import { Landmark } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -23,22 +23,18 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const result = await signIn("credentials", {
-        email,
-        password,
-        redirect: false,
-      });
+      const result = await loginAction({ email, password });
 
       if (result?.error) {
-        setError("E-mail ou senha incorretos.");
-      } else {
-        router.refresh();
-        router.push("/");
+        setError(result.error);
+        setLoading(false);
       }
     } catch (err) {
+      if (err instanceof Error && err.message === "NEXT_REDIRECT") {
+        throw err;
+      }
       console.error(err);
       setError("Ocorreu um erro ao tentar entrar. Tente novamente.");
-    } finally {
       setLoading(false);
     }
   };

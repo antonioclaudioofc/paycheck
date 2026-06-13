@@ -9,7 +9,7 @@ export const createCategorySchema = z.object({
       "Deve ser um código de cor hexadecimal válido (ex: #ffffff)",
     ),
   icon: z.string().optional().nullable(),
-  type: z.enum(["INCOME", "EXPENSE"]),
+  isDefault: z.boolean().optional(),
 });
 
 export type CreateCategoryInput = z.infer<typeof createCategorySchema>;

@@ -5,8 +5,15 @@ import { BottomNav } from "./bottom-nav";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { Landmark } from "lucide-react";
 import SidebarNav from "./sidebar-nav";
+import { Session } from "next-auth";
 
-export function AppShell({ children }: { children: React.ReactNode }) {
+export function AppShell({
+  children,
+  session,
+}: {
+  children: React.ReactNode;
+  session: Session | null;
+}) {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   useEffect(() => {
@@ -37,7 +44,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           isCollapsed ? "md:w-20" : "md:w-64"
         }`}
       >
-        <SidebarNav isCollapsed={isCollapsed} toggleCollapse={toggleCollapse} />
+        <SidebarNav
+          isCollapsed={isCollapsed}
+          toggleCollapse={toggleCollapse}
+          user={session?.user}
+        />
       </aside>
 
       <main
@@ -49,7 +60,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       </main>
 
       <nav className="fixed bottom-0 inset-x-0 z-40 bg-card/90 backdrop-blur-md border-t border-border flex md:hidden">
-        <BottomNav />
+        <BottomNav user={session?.user} />
       </nav>
     </div>
   );

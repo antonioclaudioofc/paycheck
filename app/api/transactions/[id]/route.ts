@@ -82,8 +82,11 @@ export async function PUT(
       const category = await prisma.category.findFirst({
         where: {
           id: validated.data.categoryId,
-          userId: session.user.id,
           active: true,
+          OR: [
+            { userId: session.user.id },
+            { isDefault: true },
+          ],
         },
       });
 

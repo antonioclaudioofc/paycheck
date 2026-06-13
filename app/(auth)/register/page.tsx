@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { loginAction } from "@/app/actions/auth";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -36,16 +37,29 @@ export default function RegisterPage() {
 
       if (!response.ok) {
         setError(data.error || "Ocorreu um erro ao criar a conta.");
+        setLoading(false);
       } else {
-        setSuccess(true);
-        setTimeout(() => {
-          router.push("/login");
-        }, 2000);
+        const result = await loginAction({ email, password });
+
+        if (result?.error) {
+          setError(
+            "Conta criada, mas ocorreu um erro no login automático. Vá para a tela de login.",
+          );
+          setLoading(false);
+          setTimeout(() => {
+            router.push("/login");
+          }, 3000);
+        } else {
+          setSuccess(true);
+          setLoading(false);
+        }
       }
     } catch (err) {
+      if (err instanceof Error && err.message === "NEXT_REDIRECT") {
+        throw err;
+      }
       console.error(err);
       setError("Falha na rede. Tente novamente.");
-    } finally {
       setLoading(false);
     }
   };
@@ -71,7 +85,7 @@ export default function RegisterPage() {
         {success && (
           <Alert
             type="success"
-            message="Conta criada com sucesso! Redirecionando para o login..."
+            message="Conta criada com sucesso! Redirecionando..."
             className="mb-6"
           />
         )}
@@ -84,6 +98,7 @@ export default function RegisterPage() {
             onChange={(e) => setName(e.target.value)}
             required
             placeholder="Digite seu nome"
+            disabled={loading || success}
           />
 
           <Input
@@ -93,6 +108,7 @@ export default function RegisterPage() {
             onChange={(e) => setEmail(e.target.value)}
             required
             placeholder="Digite seu e-mail"
+            disabled={loading || success}
           />
 
           <Input
@@ -102,6 +118,7 @@ export default function RegisterPage() {
             onChange={(e) => setPassword(e.target.value)}
             required
             placeholder="Crie uma senha"
+            disabled={loading || success}
           />
 
           <Button

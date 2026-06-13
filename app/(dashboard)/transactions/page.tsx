@@ -33,7 +33,7 @@ export default function TransactionsPage() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
-  const filteredCategories = allCategories.filter((c) => c.type === type);
+  const filteredCategories = allCategories;
 
   useEffect(() => {
     Promise.resolve().then(() => {
@@ -226,7 +226,10 @@ export default function TransactionsPage() {
                     ></div>
                     <div>
                       <p className="font-semibold text-sm">{tx.description}</p>
-                      <p className="text-xs text-muted-foreground" suppressHydrationWarning>
+                      <p
+                        className="text-xs text-muted-foreground"
+                        suppressHydrationWarning
+                      >
                         {tx.category?.name} •{" "}
                         {new Date(tx.date).toLocaleDateString("pt-br")}
                       </p>

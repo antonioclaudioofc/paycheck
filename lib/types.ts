@@ -3,8 +3,18 @@ export interface Category {
   id: string;
   name: string;
   color: string;
-  type: "INCOME" | "EXPENSE";
   icon?: string | null;
+  isDefault?: boolean;
+  userId?: string | null;
+}
+
+export interface User {
+  id: string;
+  name: string | null;
+  email: string;
+  role: "ADMIN" | "USER";
+  permissions: { name: string }[];
+  createdAt: string;
 }
 
 export interface Transaction {

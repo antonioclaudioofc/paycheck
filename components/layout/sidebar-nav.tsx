@@ -13,8 +13,10 @@ import {
   Landmark,
   ChevronLeft,
   ChevronRight,
+  Shield,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { Session } from "next-auth";
 
 const navItems = [
   { href: "/", label: "Dashboard", icon: LayoutDashboard },
@@ -27,9 +29,14 @@ const navItems = [
 interface SidebarNavProps {
   isCollapsed: boolean;
   toggleCollapse: () => void;
+  user?: Session["user"];
 }
 
-export default function SidebarNav({ isCollapsed, toggleCollapse }: SidebarNavProps) {
+export default function SidebarNav({
+  isCollapsed,
+  toggleCollapse,
+  user,
+}: SidebarNavProps) {
   const pathname = usePathname();
 
   return (
@@ -72,30 +79,40 @@ export default function SidebarNav({ isCollapsed, toggleCollapse }: SidebarNavPr
         </div>
 
         <nav className="flex flex-col space-y-1.5">
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = pathname === item.href;
+          {(() => {
+            const items = [...navItems];
+            if (user?.role === "ADMIN") {
+              items.push({
+                href: "/admin",
+                label: "Painel Admin",
+                icon: Shield,
+              });
+            }
+            return items.map((item) => {
+              const Icon = item.icon;
+              const isActive = pathname === item.href;
 
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`flex items-center rounded-xl text-base font-semibold transition-all duration-200 ${
-                  isCollapsed
-                    ? "justify-center p-3 w-12 h-12"
-                    : "space-x-3.5 px-4 py-3.5"
-                } ${
-                  isActive
-                    ? "bg-primary text-primary-foreground shadow shadow-primary/10"
-                    : "hover:bg-secondary text-muted-foreground hover:text-foreground"
-                }`}
-                title={item.label}
-              >
-                <Icon className="w-6 h-6 shrink-0" />
-                {!isCollapsed && <span>{item.label}</span>}
-              </Link>
-            );
-          })}
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`flex items-center rounded-xl text-base font-semibold transition-all duration-200 ${
+                    isCollapsed
+                      ? "justify-center p-3 w-12 h-12"
+                      : "space-x-3.5 px-4 py-3.5"
+                  } ${
+                    isActive
+                      ? "bg-primary text-primary-foreground shadow shadow-primary/10"
+                      : "hover:bg-secondary text-muted-foreground hover:text-foreground"
+                  }`}
+                  title={item.label}
+                >
+                  <Icon className="w-6 h-6 shrink-0" />
+                  {!isCollapsed && <span>{item.label}</span>}
+                </Link>
+              );
+            });
+          })()}
         </nav>
       </div>
 

@@ -16,7 +16,7 @@ export default function BudgetsPage() {
     useCategories();
   const createBudget = useCreateBudget();
 
-  const expenseCategories = allCategories.filter((c) => c.type === "EXPENSE");
+  const expenseCategories = allCategories;
 
   const [categoryId, setCategoryId] = useState("");
   const [amount, setAmount] = useState("");

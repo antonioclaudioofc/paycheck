@@ -8,7 +8,9 @@ import {
   FolderTree,
   PiggyBank,
   Target,
+  Shield,
 } from "lucide-react";
+import { Session } from "next-auth";
 
 const navItems = [
   { href: "/transactions", label: "Transações", icon: ArrowLeftRight },
@@ -18,12 +20,17 @@ const navItems = [
   { href: "/goals", label: "Metas", icon: Target },
 ];
 
-export function BottomNav() {
+export function BottomNav({ user }: { user?: Session["user"] }) {
   const pathname = usePathname();
+
+  const items = [...navItems];
+  if (user?.role === "ADMIN") {
+    items.push({ href: "/admin", label: "Admin", icon: Shield });
+  }
 
   return (
     <div className="flex w-full items-center justify-around h-16 px-2">
-      {navItems.map((item) => {
+      {items.map((item) => {
         const Icon = item.icon;
         const isActive = pathname === item.href;
 

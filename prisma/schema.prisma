@@ -16,6 +16,7 @@ model User {
   passwordHash  String?   @map("password_hash")
   createdAt     DateTime  @default(now()) @map("created_at")
   updatedAt     DateTime  @updatedAt @map("updated_at")
+  role          UserRole  @default(USER)
   active        Boolean   @default(true)
 
   accounts     Account[]
@@ -24,6 +25,7 @@ model User {
   categories   Category[]
   budgets      Budget[]
   goals        Goal[]
+  permissions  Permission[]
 
   @@map("users")
 }
@@ -60,22 +62,21 @@ model Session {
 }
 
 model Category {
-  id        String          @id @default(cuid())
-  userId    String          @map("user_id")
+  id        String   @id @default(cuid())
+  userId    String?  @map("user_id")
   name      String
-  color     String          @default("#2563eb")
+  color     String   @default("#2563eb")
   icon      String?
-  type      TransactionType // INCOME | EXPENSE
-  isDefault Boolean         @default(false) @map("is_default")
-  createdAt DateTime        @default(now()) @map("created_at")
-  updatedAt DateTime        @updatedAt @map("updated_at")
-  active    Boolean         @default(true)
+  isDefault Boolean  @default(false) @map("is_default")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  active    Boolean  @default(true)
 
-  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user         User?         @relation(fields: [userId], references: [id], onDelete: Cascade)
   transactions Transaction[]
   budgets      Budget[]
 
-  @@unique([userId, name, type])
+  @@unique([userId, name])
   @@map("categories")
 }
 
@@ -156,4 +157,22 @@ enum GoalStatus {
   COMPLETED
   PAUSED
   CANCELLED
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+model Permission {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  name      String // e.g. "manage:categories"
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, name])
+  @@map("permissions")
 }

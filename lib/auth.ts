@@ -28,6 +28,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
         const user = await prisma.user.findUnique({
           where: { email },
+          include: {
+            permissions: {
+              select: {
+                name: true,
+              },
+            },
+          },
         });
 
         if (!user || !user.passwordHash) {
@@ -47,6 +54,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           name: user.name,
           email: user.email,
           image: user.image,
+          role: user.role,
+          permissions: user.permissions.map((p) => p.name),
         };
       },
     }),
@@ -62,6 +71,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         token.email = user.email;
         token.name = user.name;
         token.picture = user.image;
+        token.role = user.role;
+        token.permissions = user.permissions || [];
       }
 
       if (trigger === "update" && session) {
@@ -76,6 +87,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         session.user.email = token.email as string;
         session.user.name = token.name as string;
         session.user.image = token.picture as string;
+        session.user.role = token.role as any;
+        session.user.permissions = token.permissions as string[];
       }
       return session;
     },
